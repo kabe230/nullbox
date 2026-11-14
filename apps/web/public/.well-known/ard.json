@@ -1,0 +1,16 @@
+{
+  "entries": [
+    {
+      "identifier": "urn:air:team-05.fasthacks.cloud:nullbox:support-guide",
+      "displayName": "Nullbox Support Navigation",
+      "description": "Instructions for navigating the public support portal and using its existing form only with user authorization. No credentials or private ticket content.",
+      "type": "application/agent-skills+md",
+      "url": "https://team-05.fasthacks.cloud/skills/nullbox-support/SKILL.md",
+      "representativeQueries": [
+        "How can I help a user submit a Nullbox support request?",
+        "How should I handle a private Nullbox ticket link?",
+        "Nullboxで問い合わせを送るには？"
+      ]
+    }
+  ]
+}

@@ -6,8 +6,10 @@ pub mod extract;
 mod utility;
 mod worker;
 
+use crate::telemetry::trace_request;
 use axum::Router;
 use axum::http::{HeaderName, HeaderValue, Method, header};
+use axum::middleware::from_fn;
 use axum::routing::{get, post};
 use tower_http::cors::{AllowOrigin, CorsLayer};
 use tower_http::trace::TraceLayer;
@@ -42,7 +44,7 @@ pub fn router(state: AppState) -> Router {
 /// Routes outside `/api` (an MCP server at `/mcp`, say) go next to the `nest` in
 /// `router`, so they pass through here too.
 pub fn middleware<S: Clone + Send + Sync + 'static>(router: Router<S>, config: &Config) -> Router<S> {
-    router.layer(cors(config)).layer(TraceLayer::new_for_http())
+    router.layer(from_fn(trace_request)).layer(cors(config)).layer(TraceLayer::new_for_http())
 }
 
 /// CORS for the web app on another origin (Vite in dev, Tauri). `Authorization` is

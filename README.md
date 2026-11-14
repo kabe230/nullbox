@@ -1,8 +1,8 @@
 # Nullbox
 
-English | [日本語](README.ja.md)
+English | [���{��](README.ja.md)
 
-> ヌルボックス: support, but make it void.
+> �k���{�b�N�X: support, but make it void.
 
 A deliberately small, deliberately silly ticketing system. Customers report problems, workers
 answer them, and everyone works toward **Inbox Zero** while the **Backlog Beast** watches.
@@ -124,10 +124,10 @@ address, or to an empty value when one web server serves both the web app and `/
   customer reply brings it back to `open` ("IT'S ALIVE!"). `closed` ("Sent to the Shadow Realm")
   is final.
 - **Lost secret link**: a known MVP limitation. There is no way to recover it (email would fix that).
-- **Name**: "Nullbox" in both languages, with ヌルボックス in the Japanese subtitle.
+- **Name**: "Nullbox" in both languages, with �k���{�b�N�X in the Japanese subtitle.
 - **IDs and timestamps** are stored as text (uuid v7, RFC 3339 UTC) and generated in Rust, so the
   schema ports to Postgres with type changes only. Ticket numbers are allocated in the repository.
-- `X-Actor-Name` is percent-encoded so non-ASCII names (山田) survive HTTP headers.
+- `X-Actor-Name` is percent-encoded so non-ASCII names (�R�c) survive HTTP headers.
 
 ## Working on the database
 
@@ -155,7 +155,7 @@ a customer replies, and the ticket rises from the dead. Truly finished tickets a
 
 Ticket #404 exists. Nobody has ever found it.
 
-Some say that if you type ↑ ↑ ↓ ↓ ← → ← → B A, the app turns into Enterprise Software. Those who
+Some say that if you type �� �� �� �� �� �� �� �� B A, the app turns into Enterprise Software. Those who
 have filled in its forms are still waiting for approval.
 
 When the server panics, it logs under the target `EXISTENTIAL`. It is not DNS. It is never DNS.
@@ -163,13 +163,27 @@ When the server panics, it logs under the target `EXISTENTIAL`. It is not DNS. I
 
 ### Easter eggs
 
-- Konami code: Enterprise Mode™, with absurd mandatory fields and an eternal "Synergizing…"
+- Konami code: Enterprise Mode?, with absurd mandatory fields and an eternal "Synergizing�c"
 - Ticket #404 is shown as "Not Found"
 - Typing `sudo` in the inbox search: "This incident will be reported"
 - Caps Lock on while replying: "Priority: Loud" (cosmetic, honest)
-- Random loading messages, e.g. "Bribing the database…"
+- Random loading messages, e.g. "Bribing the database�c"
 - `GET /api/teapot`
 
 ## License
 
 [The Unlicense](LICENSE): public domain. Do whatever you want with it.
+
+## OpenTelemetry traces
+
+Tracing is disabled by default. To enable OTLP HTTP/protobuf tracing, set these in the API container environment (keep the token in the server's secret store, never in source or logs):
+
+```sh
+NULLBOX_OTEL_ENABLED=true
+OTEL_SERVICE_NAME=nullbox-api
+OTEL_EXPORTER_OTLP_ENDPOINT=https://orga.fasthacks.cloud/api/otlp
+OTEL_EXPORTER_OTLP_PROTOCOL=http/protobuf
+OTEL_EXPORTER_OTLP_HEADERS=Authorization=Bearer%20<team-token>
+```
+
+The standard base endpoint appends `/v1/traces`. The SDK batches spans and flushes on graceful shutdown; incoming W3C `traceparent` is honored, including its sampling flag. Only the route pattern, method, response status and span timing are exported. No request body, URL query, or authentication headers are added. Do not configure secrets as resource attributes. The token value must be URL encoded in the standard headers variable.

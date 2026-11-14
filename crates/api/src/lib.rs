@@ -17,6 +17,7 @@ pub mod http;
 pub mod policy;
 pub mod repo;
 pub mod service;
+pub mod telemetry;
 pub mod token;
 
 use std::sync::Arc;

@@ -1,4 +1,5 @@
 import { createBrowserRouter } from "react-router";
+import { CheckoutPage } from "./routes/CheckoutPage";
 import { AppShell } from "./components/AppShell";
 import { CustomerTicketPage } from "./routes/customer/CustomerTicketPage";
 import { NewTicketPage } from "./routes/customer/NewTicketPage";
@@ -14,6 +15,7 @@ export const router = createBrowserRouter([
   {
     element: <AppShell />,
     children: [
+      { path: "/checkout", element: <CheckoutPage /> },
       // customer portal
       { path: "/", element: <NewTicketPage /> },
       { path: "/t/:id", element: <CustomerTicketPage /> },

@@ -27,6 +27,7 @@ export function AppShell() {
           </span>
         </NavLink>
         <nav className={styles.nav}>
+          <NavLink to="/checkout">テスト決済</NavLink>
           <NavLink to="/" end>
             {copy.app.nav.submit}
           </NavLink>

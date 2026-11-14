@@ -1,5 +1,5 @@
 use anyhow::Context;
-use nullbox_api::{AppState, Config, db, http};
+use nullbox_api::{AppState, Config, db, http, telemetry};
 use tracing_subscriber::EnvFilter;
 
 #[tokio::main]
@@ -12,6 +12,7 @@ async fn main() -> anyhow::Result<()> {
         tracing::error!(target: "EXISTENTIAL", %info, "the server has stared into the void, and the void panicked back");
     }));
 
+    let telemetry = telemetry::init()?;
     let config = Config::from_env().context("reading config")?;
     let pool = db::connect(&config.database_url).await.context("opening the database")?;
     let bind_addr = config.bind_addr;
@@ -25,5 +26,8 @@ async fn main() -> anyhow::Result<()> {
             tracing::info!("shutting down, tickets will have to wait");
         })
         .await?;
+    if let Some(provider) = telemetry {
+        provider.shutdown().context("shutting down telemetry")?;
+    }
     Ok(())
 }
